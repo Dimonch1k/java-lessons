@@ -2,97 +2,91 @@ package org.com;
 
 import java.util.AbstractList;
 
-public class DynamicList extends AbstractList<Integer>
-{
-  private       Integer[] items;
-  private       int       count;
-  private final int       INITIAL_SIZE = 9;
+public class DynamicList extends AbstractList<Integer> {
+    private Integer[] items;
+    private int count;
+    private final int INITIAL_SIZE = 9;
 
-  public DynamicList() {
-    items = new Integer[INITIAL_SIZE];
-  }
-
-  @Override
-  public boolean add( Integer integer ) {
-    if ( isFull() ) {
-      Integer[] newArray = new Integer[count + 4];
-
-      for ( int i = 0; i < count; i++ ) {
-        newArray[i] = items[i];
-      }
-
-      items = newArray;
+    public DynamicList() {
+        items = new Integer[INITIAL_SIZE];
     }
 
-    items[count] = integer;
+    @Override
+    public boolean add(Integer integer) {
+        if (isFull()) {
+            Integer[] newArray = new Integer[count + 4];
 
-    count++;
+            for (int i = 0; i < count; i++) {
+                newArray[i] = items[i];
+            }
 
-    return true;
-  }
+            items = newArray;
+        }
 
-  @Override
-  public Integer get( int index ) {
-    try {
-      return items[index - 1];
+        items[count] = integer;
+
+        count++;
+
+        return true;
     }
-    catch ( Exception ex ) {
-      throw new IndexOutOfBoundsException( "Such array item doesn't exist" );
+
+    @Override
+    public Integer get(int index) {
+        isCorrectIndex(index);
+
+        return items[index];
     }
-  }
 
-  @Override
-  public String toString() {
-    StringBuilder stringBuilder = new StringBuilder();
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append( "[ " );
-    for ( int i = 0; i < count; i++ ) {
-      stringBuilder.append( items[i] );
-      stringBuilder.append( " " );
+        stringBuilder.append("[ ");
+        for (int i = 0; i < count; i++) {
+            stringBuilder.append(items[i]);
+            stringBuilder.append(" ");
+        }
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
     }
-    stringBuilder.append( "]" );
 
-    return stringBuilder.toString();
-  }
-
-  @Override
-  public int size() {
-    return count;
-  }
-
-  @Override
-  public Integer remove( int itemOrderNumber ) {
-    try {
-      int index = itemOrderNumber - 1;
-
-      System.out.println("Index: " + items[index]);
-      if ( items[index] == null ) {
-        throw new IndexOutOfBoundsException( "Such array item doesn't exist" );
-      }
-
-      System.out.println("Index: " + items[index]);
-
-      Integer removedItem = items[index];
-
-      for ( int i = index; i < count - 1; i++ ) {
-       items[i] = items[i + 1];
-      }
-
-      count--;
-
-      return removedItem;
+    @Override
+    public int size() {
+        return count;
     }
-    catch ( Exception ex ) {
-      throw new IndexOutOfBoundsException( "Such array item doesn't exist" );
+
+    @Override
+    public Integer remove(int index) {
+        isCorrectIndex(index);
+
+        Integer removedItem = items[index];
+
+        for (int i = index; i < count - 1; i++) {
+            items[i] = items[i + 1];
+        }
+
+        items[count - 1] = null;
+        count--;
+
+        return removedItem;
     }
-  }
 
-  @Override
-  public void clear() {
+    @Override
+    public void clear() {
+        for (int i = 0; i < count; i++) {
+            items[i] = null;
+        }
+        count = 0;
+    }
 
-  }
+    private boolean isFull() {
+        return count + 1 > items.length;
+    }
 
-  private boolean isFull() {
-    return count + 1 > items.length;
-  }
+    private void isCorrectIndex(int index) {
+        if (index < 0 || index >= count) {
+            throw new IndexOutOfBoundsException("Such array item doesn't exist");
+        }
+    }
 }
