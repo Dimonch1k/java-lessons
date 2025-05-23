@@ -1,7 +1,6 @@
 package org.com;
 
 import java.util.AbstractList;
-import java.util.HashMap;
 
 public class DynamicList extends AbstractList<Integer>
 {
