@@ -1,5 +1,7 @@
 package org.com;
 
+import com.sun.jdi.request.DuplicateRequestException;
+
 import java.util.Iterator;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -60,42 +62,59 @@ public class CustomHashMap
     return null;
   }
 
-  public boolean set( int value ) {
-    int arrayIndex = hashFunc( value );
+  public boolean set(int value) {
+    int arrayIndex = hashFunc(value);
 
-    if ( this.nodes[arrayIndex] == null ) {
-      this.nodes[arrayIndex] = new CustomNode( value );
+    if (this.nodes[arrayIndex] == null) {
+      this.nodes[arrayIndex] = new CustomNode(value);
       return true;
     }
 
-    if ( this.nodes[arrayIndex].value == value &&
-         this.nodes[arrayIndex].nextNode == null ) {
+    if (this.nodes[arrayIndex].value == value) {
+      throw new DuplicateRequestException("Such value already exists");
+    }
 
-      // Create new node, set for current node next node and for new node
-      // previous
-      this.nodes[arrayIndex].nextNode = new CustomNode(
-        this.nodes[arrayIndex],
-        value
-      );
+    CustomNode current = this.nodes[arrayIndex];
+    while (current.nextNode != null) {
+      current = current.nextNode;
+      if (current.value == value) {
+        throw new DuplicateRequestException("Such value already exists");
+      }
+    }
 
+    // Add new node at end
+    current.nextNode = new CustomNode(current, value);
+    return true;
+  }
+
+  public boolean delete(int value) {
+    int arrayIndex = hashFunc(value);
+    CustomNode current = this.nodes[arrayIndex];
+
+    if (current == null) return false;
+
+    if (current.value == value) {
+      if (current.nextNode != null) {
+        this.nodes[arrayIndex] = current.nextNode;
+        this.nodes[arrayIndex].prevNode = null;
+      } else {
+        this.nodes[arrayIndex] = null;
+      }
       return true;
     }
 
-    CustomNode current = this.nodes[arrayIndex].nextNode;
-
-    while ( current != null ) {
-      if ( current.value == value ) {
-        return value;
+    while (current != null) {
+      if (current.value == value) {
+        if (current.prevNode != null) {
+          current.prevNode.nextNode = current.nextNode;
+        }
+        if (current.nextNode != null) {
+          current.nextNode.prevNode = current.prevNode;
+        }
+        return true;
       }
       current = current.nextNode;
     }
-
-    //    CustomNode newNode = new CustomNode( value );
-
-    return false;
-  }
-
-  public boolean delete( int value ) {
 
     return false;
   }

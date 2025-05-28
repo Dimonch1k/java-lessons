@@ -13,6 +13,9 @@ public class CustomHashMapTest
     assertTrue( customHashMap.set( 1 ) );
     assertTrue( customHashMap.set( 2 ) );
     assertTrue( customHashMap.set( 3 ) );
+    assertTrue( customHashMap.set( 4 ) );
+    assertTrue( customHashMap.set( 5 ) );
+    assertTrue( customHashMap.set( 6 ) );
 
     assertEquals(
       1,
@@ -22,16 +25,17 @@ public class CustomHashMapTest
 
   @Test
   void testSet() {
-    CustomHashMap customHashMap = new CustomHashMap( 3 );
+    CustomHashMap customHashMap = new CustomHashMap(3);
 
-    assertTrue( customHashMap.set( 1 ) );
-    assertTrue( customHashMap.set( 2 ) );
-    assertTrue( customHashMap.set( 3 ) );
+    assertTrue(customHashMap.set(1));
+    assertTrue(customHashMap.set(2));
+    assertTrue(customHashMap.set(3));
 
-    assertNull( customHashMap.get( 1 ) );
-    assertNull( customHashMap.get( 2 ) );
-    assertNull( customHashMap.get( 3 ) );
+    assertEquals(1, customHashMap.get(1));
+    assertEquals(2, customHashMap.get(2));
+    assertEquals(3, customHashMap.get(3));
   }
+
 
   @Test
   void testDelete() {
@@ -44,5 +48,9 @@ public class CustomHashMapTest
     assertTrue( customHashMap.delete( 2 ) );
 
     assertNull( customHashMap.get( 2 ) );
+
+    assertEquals(1, customHashMap.get(1));
+//    assertEquals(2, customHashMap.get(2));
+    assertEquals(3, customHashMap.get(3));
   }
 }
