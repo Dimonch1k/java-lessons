@@ -5,3 +5,5 @@ ENV POSTGRES_PASSWORD=postgres
 ENV POSTGRES_DB=java-lessons
 
 COPY init.sql /docker-entrypoint-initdb.d/
+
+ENTRYPOINT [ 'yarn', 'dev' ]
